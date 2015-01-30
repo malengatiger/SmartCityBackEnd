@@ -9,48 +9,16 @@ package com.boha.smartcity.dto;
 import com.boha.smartcity.data.*;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
  * @author aubreyM
  */
-@Entity
-@Table(name = "province")
-@NamedQueries({
-    @NamedQuery(name = "Province.findAll", query = "SELECT p FROM Province p"),
-    @NamedQuery(name = "Province.findByProvinceID", query = "SELECT p FROM Province p WHERE p.provinceID = :provinceID"),
-    @NamedQuery(name = "Province.findByProvinceName", query = "SELECT p FROM Province p WHERE p.provinceName = :provinceName")})
 public class ProvinceDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "provinceID")
     private Integer provinceID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "provinceName")
     private String provinceName;
-    @JoinColumn(name = "countryID", referencedColumnName = "countryID")
-    @ManyToOne(optional = false)
-    private CountryDTO country;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "province")
+    private Integer countryID;
     private List<CityDTO> cityList;
 
     public ProvinceDTO() {
@@ -60,9 +28,10 @@ public class ProvinceDTO implements Serializable {
         this.provinceID = provinceID;
     }
 
-    public ProvinceDTO(Integer provinceID, String provinceName) {
-        this.provinceID = provinceID;
-        this.provinceName = provinceName;
+    public ProvinceDTO(Province a) {
+        this.provinceID = a.getProvinceID();
+        this.provinceName = a.getProvinceName();
+        countryID = a.getCountry().getCountryID();
     }
 
     public Integer getProvinceID() {
@@ -81,15 +50,15 @@ public class ProvinceDTO implements Serializable {
         this.provinceName = provinceName;
     }
 
-    public CountryDTO getCountry() {
-        return country;
+    public Integer getCountryID() {
+        return countryID;
     }
 
-    public void setCountry(CountryDTO country) {
-        this.country = country;
+    public void setCountryID(Integer countryID) {
+        this.countryID = countryID;
     }
 
-  
+    
     public List<CityDTO> getCityList() {
         return cityList;
     }

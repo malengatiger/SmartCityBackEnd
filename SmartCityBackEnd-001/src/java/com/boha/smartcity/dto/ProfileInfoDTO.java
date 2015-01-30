@@ -10,23 +10,6 @@ import com.boha.smartcity.data.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -62,7 +45,7 @@ public class ProfileInfoDTO implements Serializable {
     private String secondaryEmail;
     private String password;
     private List<ComplaintDTO> complaintList;
-    private CityDTO city;
+    private Integer cityID;
     private List<AccountDTO> accountList;
 
     public ProfileInfoDTO() {
@@ -78,6 +61,39 @@ public class ProfileInfoDTO implements Serializable {
         this.iDNumber = a.getIDNumber();
         this.firstName = a.getFirstName();
         this.lastName = a.getLastName();
+        customerType = a.getCustomerType();
+        iDNumber = a.getIDNumber();
+        iDCountry = a.getiDCountry();
+        title = a.getTitle();
+        firstName = a.getFirstName();
+        lastName = a.getLastName();
+        cellNumber = a.getCellNumber();
+        homeNumber = a.getHomeNumber();
+        workNumber = a.getWorkNumber();
+        manAgent = a.getManAgent();
+        orgName = a.getOrgName();
+        contactPerson = a.getContactPerson();
+        contactPos = a.getContactPos();
+        govDepID = a.getGovDepID();
+        govBranch = a.getGovBranch();
+        email1 = a.getEmail1();
+        email1Status = a.getEmail1Status();
+        email2 = a.getEmail2();
+        dateActivated = a.getDateActivated();
+        empName = a.getEmpName();
+        custStatus = a.getCustStatus();
+        capDate = a.getCapDate();
+        capUserID = a.getCapUserID();
+        secondaryEmail = a.getSecondaryEmail();
+        cityID = a.getCity().getCityID();
+    }
+
+    public Integer getCityID() {
+        return cityID;
+    }
+
+    public void setCityID(Integer cityID) {
+        this.cityID = cityID;
     }
 
     public Integer getProfileInfoID() {
@@ -320,13 +336,6 @@ public class ProfileInfoDTO implements Serializable {
         this.iDCountry = iDCountry;
     }
 
-    public CityDTO getCity() {
-        return city;
-    }
-
-    public void setCity(CityDTO city) {
-        this.city = city;
-    }
 
     public List<AccountDTO> getAccountList() {
         return accountList;

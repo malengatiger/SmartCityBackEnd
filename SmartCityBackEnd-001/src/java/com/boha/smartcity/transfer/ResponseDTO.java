@@ -24,10 +24,18 @@ import com.boha.smartcity.dto.StaffTypeDTO;
 import java.util.List;
 
 /**
- *
+ * This class represents the response from the server. A status code of 0 indicates
+ * successful completion of the request. An non-zero status code indicates an error that is 
+ * described in the message property.
+ * 
+ * SmartCity Cloud Platform application always returns an object of this class.
+ * 
+ * If incoming request had zipResponse set to true, this object will be compressed by GZip.
+ * 
  * @author aubreyM
  */
 public class ResponseDTO {
+    //response status
     private int statusCode;
     private String message, sessionID;
     private double requestResponseTimeSeconds;

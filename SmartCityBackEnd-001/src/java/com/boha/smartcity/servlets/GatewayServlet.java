@@ -28,7 +28,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
+ * This servlet is the main entry point to the SmartCity Cloud Platform when the requestor uses the
+ * http or https protocol to request services. The servlet expects a single parameter named JSON that contains 
+ * a JSON string that is converted into a RequestDTO object instance.
+ * 
+ * The RequestDTO object is handed off to the TrafficCop EJB for processing. If the zipResponse
+ * property is set to true, the ResponseDTO result is compressed before transfer.
+ * 
+ * The platform also supports requests made via the
+ * websocket protocol. (see GatewayWebSocket).
+ * 
  * @author aubreyM
  */
 @WebServlet(name = "GatewayServlet", urlPatterns = {"/smart"})
@@ -48,8 +57,8 @@ public class GatewayServlet extends HttpServlet {
     static final String SOURCE = "GatewayServlet";
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Hand off RequestDTO object to the TrafficCop and process result by compressing
+     * the result if zipResponse set to true.
      *
      * @param request servlet request
      * @param response servlet response
@@ -101,6 +110,12 @@ public class GatewayServlet extends HttpServlet {
         return m.doubleValue();
     }
 
+    /**
+     * Convert JSON string to RequestDTO object 
+     * @param gson
+     * @param req
+     * @return 
+     */
     private RequestDTO getRequest(Gson gson, HttpServletRequest req) {
         RequestDTO cr = new RequestDTO();
         String json = req.getParameter("JSON");

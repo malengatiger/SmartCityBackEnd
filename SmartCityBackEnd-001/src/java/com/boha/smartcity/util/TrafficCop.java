@@ -14,12 +14,22 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * This class is a convenience utility that executes the appropriate
+ * method in the EJB's that is requested by specifying the requestType
+ * along with the appropriate properties for the request.
  * @author aubreyM
  */
 @Stateless
 public class TrafficCop {
 
+    /**
+     * Process appropriate EJB method as specified by requestType.
+     * @param req
+     * @param dataUtil
+     * @param listUtil
+     * @param bee
+     * @return ResponseDTO
+     */
     public ResponseDTO processRequest(RequestDTO req,
             DataUtil dataUtil, ListUtil listUtil, AlertWorkerBee bee) {
         long start = System.currentTimeMillis();
@@ -32,7 +42,7 @@ public class TrafficCop {
                             req.getLatitude(), req.getLongitude());
                     break;
                 case RequestDTO.ADD_ALERT:
-                    //resp = dataUtil.addAlert(req.getAlert());
+                    resp = dataUtil.addAlert(req.getAlert());
                     break;
                 case RequestDTO.GET_ALERTS_WITHIN_RADIUS:
                     resp = bee.getAlertsWithinRadius(req.getLatitude(), req.getLongitude(), req.getRadius(), 

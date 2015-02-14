@@ -6,11 +6,8 @@ package com.boha.smartcity.servlets;
 
 import com.boha.smartcity.transfer.RequestDTO;
 import com.boha.smartcity.transfer.ResponseDTO;
-import com.boha.smartcity.util.DataException;
 import com.boha.smartcity.util.DataUtil;
-import com.boha.smartcity.util.SmartProperties;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -27,16 +23,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
-import org.joda.time.DateTime;
 
 /**
- * This servlet accepts image files uploaded from CourseMaker devices and saves
- * them on disk according to the requestor's role.
+ * This servlet accepts image files uploaded from SmartCity devices and saves
+ * them on disk according to the type of image being downloaded.
+ * 
+ * After image downloaded, the appropriate image record is inserted into
+ * the SmartCity database
  *
  * @author aubreyM
  */

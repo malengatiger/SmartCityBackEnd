@@ -5,7 +5,6 @@
  */
 package com.boha.smartcity.servlets;
 
-import com.boha.smartcity.dto.AlertDTO;
 import com.boha.smartcity.transfer.RequestDTO;
 import com.boha.smartcity.transfer.ResponseDTO;
 import com.boha.smartcity.util.DataUtil;
@@ -30,8 +29,18 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+
 /**
- *
+ * This websocket is the main entry point to the SmartCity Cloud Platform when the requestor uses the
+ * websocket protocol to request services. The websocket expects a single parameter named JSON that contains 
+ * a JSON string that is converted into a RequestDTO object instance.
+ * 
+ * The RequestDTO object is handed off to the TrafficCop EJB for processing. If the zipResponse
+ * property is set to true, the ResponseDTO result is compressed before transfer.
+ * 
+ * The platform also supports requests made via the
+ * websocket protocol. (see GatewayWebSocket).
+ * 
  * @author aubreyM
  */
 @ServerEndpoint("/wssmart")
@@ -67,7 +76,7 @@ public class GatewayWebSocket {
         log.log(Level.OFF, "Unsolicited alerts sent: {0}", count);
 
     }
-    public void sendZippedAlert(ByteBuffer bb) {
+    public void sendZippedResponse(ByteBuffer bb) {
         int count = 0;
         for (Session session : peers) {
             try {
@@ -99,7 +108,7 @@ public class GatewayWebSocket {
             
             if (dto.getRequestType() == RequestDTO.ADD_ALERT) {
                 resp.setMessage("UNSOLICITED");
-                sendZippedAlert(GZipUtility.getZippedResponse(resp));
+                sendZippedResponse(GZipUtility.getZippedResponse(resp));
                 
             }
         } catch (Exception ex) {

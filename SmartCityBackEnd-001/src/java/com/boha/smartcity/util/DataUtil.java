@@ -7,7 +7,9 @@ package com.boha.smartcity.util;
 
 import com.boha.smartcity.data.Alert;
 import com.boha.smartcity.data.AlertType;
-import com.boha.smartcity.data.City;
+import com.boha.smartcity.data.Municipality;
+import com.boha.smartcity.data.MunicipalityStaff;
+import com.boha.smartcity.data.ProfileInfo;
 import com.boha.smartcity.dto.AlertDTO;
 import com.boha.smartcity.transfer.ResponseDTO;
 import java.util.ArrayList;
@@ -21,7 +23,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- *
+ * This class, annotated to be an EJB, handles all the CRUD methods
+ * for the SmartCity database.
+ * 
  * @author aubreyM
  */
 @Stateless
@@ -59,34 +63,39 @@ public class DataUtil {
 //        resp.setStatusCode(0);
 //        return resp;
 //    }
-//    public ResponseDTO addAlert(AlertDTO alert) throws DataException {
-//        ResponseDTO resp = new ResponseDTO();
-//        try {
-//            Alert a = new Alert();
-//            a.setCategory(em.find(Category.class, alert.getCategoryID()));
-//            a.setCity(em.find(City.class, alert.getCityID()));
-//            a.setDescription(alert.getDescription());
-//            a.setLatitude(alert.getLatitude());
-//            a.setLongitude(alert.getLongitude());
-//            a.setTitle(alert.getTitle());
-//            a.setUpdated(new Date());
-//            a.setAlertType(em.find(AlertType.class, alert.getAlertType().getAlertTypeID()));
-//            
-//            em.persist(a);
-//            em.flush();
-//            resp.setAlertList(new ArrayList<>());
-//            resp.getAlertList().add(new AlertDTO(a));
-//            log.log(Level.WARNING, "## alert added, id: {0}", a.getAlertID());
-//
-//        } catch (Exception e) {
-//            log.log(Level.SEVERE, "Failed to login", e);
-//            throw new DataException("Failed to login\n" + getErrorString(e));
-//
-//        }
-//
-//        resp.setStatusCode(0);
-//        return resp;
-//    }
+    public ResponseDTO addAlert(AlertDTO alert) throws DataException {
+        ResponseDTO resp = new ResponseDTO();
+        try {
+            Alert a = new Alert();
+            a.setMunicipality(em.find(Municipality.class, alert.getMunicipalityID()));
+            if (alert.getMunicipalityStaffID() != null) {
+                a.setMunicipalityStaff(em.find(MunicipalityStaff.class, alert.getMunicipalityStaffID()));
+            }
+            if (alert.getProfileInfoID() != null) {
+                a.setProfileInfo(em.find(ProfileInfo.class, alert.getProfileInfoID()));
+            }
+            a.setDescription(alert.getDescription());
+            a.setLatitude(alert.getLatitude());
+            a.setLongitude(alert.getLongitude());
+            a.setTitle(alert.getTitle());
+            a.setUpdated(new Date());
+            a.setAlertType(em.find(AlertType.class, alert.getAlertType().getAlertTypeID()));
+            
+            em.persist(a);
+            em.flush();
+            resp.setAlertList(new ArrayList<>());
+            resp.getAlertList().add(new AlertDTO(a));
+            log.log(Level.WARNING, "## alert added, id: {0}", a.getAlertID());
+
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "Failed to login", e);
+            throw new DataException("Failed to login\n" + getErrorString(e));
+
+        }
+
+        resp.setStatusCode(0);
+        return resp;
+    }
 
     public String getErrorString(Exception e) {
 

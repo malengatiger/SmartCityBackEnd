@@ -27,14 +27,14 @@ public class TrafficCop {
         resp.setStatusCode(0);
         try {
             switch (req.getRequestType()) {
-                case RequestDTO.LOGIN:
+                case RequestDTO.SIGN_IN_CITIZEN:
                     resp = listUtil.login(req.getUserName(), req.getPassword(), 
                             req.getLatitude(), req.getLongitude());
                     break;
                 case RequestDTO.ADD_ALERT:
                     //resp = dataUtil.addAlert(req.getAlert());
                     break;
-                case RequestDTO.GET_ALERTS:
+                case RequestDTO.GET_ALERTS_WITHIN_RADIUS:
                     resp = bee.getAlertsWithinRadius(req.getLatitude(), req.getLongitude(), req.getRadius(), 
                             AlertWorkerBee.KILOMETRES);
                     break;

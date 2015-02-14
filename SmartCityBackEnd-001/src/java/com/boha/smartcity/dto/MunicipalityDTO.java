@@ -34,6 +34,7 @@ public class MunicipalityDTO implements Serializable {
     private List<AlertDTO> alertList;
     private List<ComplaintDTO> complaintList;
     private List<ComplaintTypeDTO> complaintTypeList;
+    private List<FaqDTO> faqList;
 
     public MunicipalityDTO() {
     }
@@ -60,6 +61,14 @@ public class MunicipalityDTO implements Serializable {
 
     public void setActiveFlag(Boolean activeFlag) {
         this.activeFlag = activeFlag;
+    }
+
+    public List<FaqDTO> getFaqList() {
+        return faqList;
+    }
+
+    public void setFaqList(List<FaqDTO> faqList) {
+        this.faqList = faqList;
     }
     
 

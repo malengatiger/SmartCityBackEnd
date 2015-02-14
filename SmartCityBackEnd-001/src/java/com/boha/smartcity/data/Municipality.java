@@ -44,6 +44,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Municipality.findByLongitude", query = "SELECT m FROM Municipality m WHERE m.longitude = :longitude"),
     @NamedQuery(name = "Municipality.findByDateRegistered", query = "SELECT m FROM Municipality m WHERE m.dateRegistered = :dateRegistered")})
 public class Municipality implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipality", fetch = FetchType.LAZY)
+    private List<Faq> faqList;
     @Column(name = "activeFlag")
     private Boolean activeFlag;
     @Size(max = 200)
@@ -313,6 +315,14 @@ public class Municipality implements Serializable {
 
     public void setActiveFlag(Boolean activeFlag) {
         this.activeFlag = activeFlag;
+    }
+
+    public List<Faq> getFaqList() {
+        return faqList;
+    }
+
+    public void setFaqList(List<Faq> faqList) {
+        this.faqList = faqList;
     }
     
 }

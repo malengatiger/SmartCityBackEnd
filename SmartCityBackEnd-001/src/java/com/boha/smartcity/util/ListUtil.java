@@ -50,7 +50,8 @@ public class ListUtil {
              ProfileInfo pf = (ProfileInfo) q.getSingleResult();
              ProfileInfoDTO dto = new ProfileInfoDTO(pf);
              dto.setAccountList(getUserAccounts(pf.getProfileInfoID()));
-             resp.setProfileInfoDTO(dto);            
+             resp.setProfileInfoList(new ArrayList<>());
+             resp.getProfileInfoList().add(dto);
              resp.setAlertList(getAlerts());
              resp.setAlertTypeList(getAlertTypeList());
              resp.setStatusCode(0);

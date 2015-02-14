@@ -32,22 +32,9 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "account")
 @NamedQueries({
-    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
-    @NamedQuery(name = "Account.findByAccountID", query = "SELECT a FROM Account a WHERE a.accountID = :accountID"),
-    @NamedQuery(name = "Account.findByAccountNumber", query = "SELECT a FROM Account a WHERE a.accountNumber = :accountNumber"),
-    @NamedQuery(name = "Account.findByDateLastUpdated", query = "SELECT a FROM Account a WHERE a.dateLastUpdated = :dateLastUpdated"),
-    @NamedQuery(name = "Account.findByCurrentBalance", query = "SELECT a FROM Account a WHERE a.currentBalance = :currentBalance"),
-    @NamedQuery(name = "Account.findByTotalAccountAmount", query = "SELECT a FROM Account a WHERE a.totalAccountAmount = :totalAccountAmount"),
-    @NamedQuery(name = "Account.findByCashAfterAccount", query = "SELECT a FROM Account a WHERE a.cashAfterAccount = :cashAfterAccount"),
-    @NamedQuery(name = "Account.findByCustomerNumber", query = "SELECT a FROM Account a WHERE a.customerNumber = :customerNumber"),
-    @NamedQuery(name = "Account.findByCustomerAccountNumber", query = "SELECT a FROM Account a WHERE a.customerAccountNumber = :customerAccountNumber"),
-    @NamedQuery(name = "Account.findByCustomerAccountName", query = "SELECT a FROM Account a WHERE a.customerAccountName = :customerAccountName"),
-    @NamedQuery(name = "Account.findByLastBillAmount", query = "SELECT a FROM Account a WHERE a.lastBillAmount = :lastBillAmount"),
-    @NamedQuery(name = "Account.findByNextBillDate", query = "SELECT a FROM Account a WHERE a.nextBillDate = :nextBillDate"),
-    @NamedQuery(name = "Account.findByCurrentArrears", query = "SELECT a FROM Account a WHERE a.currentArrears = :currentArrears"),
-    @NamedQuery(name = "Account.findByBillDay", query = "SELECT a FROM Account a WHERE a.billDay = :billDay"),
-    @NamedQuery(name = "Account.findByPreviousBillDate", query = "SELECT a FROM Account a WHERE a.previousBillDate = :previousBillDate"),
-    @NamedQuery(name = "Account.findByCustomerIdentityNumber", query = "SELECT a FROM Account a WHERE a.customerIdentityNumber = :customerIdentityNumber")})
+    @NamedQuery(name = "Account.findByProfileInfo", 
+            query = "SELECT a FROM Account a where a.profileInfo.profileInfoID = :profileInfoID")
+})
 public class Account implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,7 +50,6 @@ public class Account implements Serializable {
     @Column(name = "dateLastUpdated")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateLastUpdated;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "currentBalance")
     private Double currentBalance;
     @Column(name = "totalAccountAmount")

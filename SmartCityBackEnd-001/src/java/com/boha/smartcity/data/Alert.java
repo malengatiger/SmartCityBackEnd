@@ -8,9 +8,12 @@ package com.boha.smartcity.data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +22,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,7 +46,23 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Alert.findByThumbnailURL", query = "SELECT a FROM Alert a WHERE a.thumbnailURL = :thumbnailURL"),
     @NamedQuery(name = "Alert.findByHref", query = "SELECT a FROM Alert a WHERE a.href = :href"),
     @NamedQuery(name = "Alert.findByActiveFlag", query = "SELECT a FROM Alert a WHERE a.activeFlag = :activeFlag")})
+
 public class Alert implements Serializable {
+    @JoinColumn(name = "municipalityStaffID", referencedColumnName = "municipalityStaffID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MunicipalityStaff municipalityStaff;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "alert", fetch = FetchType.LAZY)
+    private List<AlertImage> alertImageList;
+    @JoinColumn(name = "municipalityID", referencedColumnName = "municipalityID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Municipality municipality;
+    @JoinColumn(name = "profileInfoID", referencedColumnName = "profileInfoID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProfileInfo profileInfo;
+    
+    @JoinColumn(name = "alertTypeID", referencedColumnName = "alertTypeID")
+    @ManyToOne
+    private AlertType alertType;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,12 +95,7 @@ public class Alert implements Serializable {
     private String href;
     @Column(name = "activeFlag")
     private Boolean activeFlag;
-    @JoinColumn(name = "categoryID", referencedColumnName = "categoryID")
-    @ManyToOne(optional = false)
-    private Category category;
-    @JoinColumn(name = "cityID", referencedColumnName = "cityID")
-    @ManyToOne(optional = false)
-    private City city;
+   
 
     public Alert() {
     }
@@ -100,6 +115,14 @@ public class Alert implements Serializable {
 
     public void setAlertID(Integer alertID) {
         this.alertID = alertID;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
     }
 
     public Date getUpdated() {
@@ -174,22 +197,6 @@ public class Alert implements Serializable {
         this.activeFlag = activeFlag;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -214,5 +221,41 @@ public class Alert implements Serializable {
     public String toString() {
         return "com.boha.smartcity.data.Alert[ alertID=" + alertID + " ]";
     }
+
+    public AlertType getAlertType() {
+        return alertType;
+    }
+
+    public void setAlertType(AlertType alertType) {
+        this.alertType = alertType;
+    }
+
+    public ProfileInfo getProfileInfo() {
+        return profileInfo;
+    }
+
+    public void setProfileInfo(ProfileInfo profileInfo) {
+        this.profileInfo = profileInfo;
+    }
+
+    public List<AlertImage> getAlertImageList() {
+        return alertImageList;
+    }
+
+    public void setAlertImageList(List<AlertImage> alertImageList) {
+        this.alertImageList = alertImageList;
+    }
+
+    public MunicipalityStaff getMunicipalityStaff() {
+        return municipalityStaff;
+    }
+
+    public void setMunicipalityStaff(MunicipalityStaff municipalityStaff) {
+        this.municipalityStaff = municipalityStaff;
+    }
+
+   
+
+    
     
 }

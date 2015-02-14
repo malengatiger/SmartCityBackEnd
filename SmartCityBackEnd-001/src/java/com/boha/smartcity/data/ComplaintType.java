@@ -12,9 +12,12 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -33,6 +36,11 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ComplaintType.findByComplaintTypeID", query = "SELECT c FROM ComplaintType c WHERE c.complaintTypeID = :complaintTypeID"),
     @NamedQuery(name = "ComplaintType.findByComplaintTypeName", query = "SELECT c FROM ComplaintType c WHERE c.complaintTypeName = :complaintTypeName")})
 public class ComplaintType implements Serializable {
+    @Column(name = "color")
+    private Integer color;
+    @JoinColumn(name = "municipalityID", referencedColumnName = "municipalityID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Municipality municipality;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,5 +115,21 @@ public class ComplaintType implements Serializable {
     public String toString() {
         return "com.boha.smartcity.data.ComplaintType[ complaintTypeID=" + complaintTypeID + " ]";
     }
-    
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
+    }
+
 }

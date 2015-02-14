@@ -8,9 +8,12 @@ package com.boha.smartcity.data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +22,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,6 +43,13 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Complaint.findByLongitude", query = "SELECT c FROM Complaint c WHERE c.longitude = :longitude"),
     @NamedQuery(name = "Complaint.findByActiveFlag", query = "SELECT c FROM Complaint c WHERE c.activeFlag = :activeFlag")})
 public class Complaint implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "complaint", fetch = FetchType.LAZY)
+    private List<ComplaintUpdateStatus> complaintUpdateStatusList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "complaint", fetch = FetchType.LAZY)
+    private List<ComplaintImage> complaintImageList;
+    @JoinColumn(name = "municipalityID", referencedColumnName = "municipalityID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Municipality municipality;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +65,6 @@ public class Complaint implements Serializable {
     @Column(name = "complaintDate")
     @Temporal(TemporalType.TIMESTAMP)
     private Date complaintDate;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "latitude")
     private Double latitude;
     @Column(name = "longitude")
@@ -64,9 +74,7 @@ public class Complaint implements Serializable {
     @JoinColumn(name = "profileInfoID", referencedColumnName = "profileInfoID")
     @ManyToOne(optional = false)
     private ProfileInfo profileInfo;
-    @JoinColumn(name = "cityID", referencedColumnName = "cityID")
-    @ManyToOne(optional = false)
-    private City city;
+    
     @JoinColumn(name = "complaintTypeID", referencedColumnName = "complaintTypeID")
     @ManyToOne(optional = false)
     private ComplaintType complaintType;
@@ -139,13 +147,14 @@ public class Complaint implements Serializable {
         this.profileInfo = profileInfo;
     }
 
-    public City getCity() {
-        return city;
+    public Municipality getMunicipality() {
+        return municipality;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
     }
+
 
     public ComplaintType getComplaintType() {
         return complaintType;
@@ -179,5 +188,23 @@ public class Complaint implements Serializable {
     public String toString() {
         return "com.boha.smartcity.data.Complaint[ complaintID=" + complaintID + " ]";
     }
+
+    public List<ComplaintImage> getComplaintImageList() {
+        return complaintImageList;
+    }
+
+    public void setComplaintImageList(List<ComplaintImage> complaintImageList) {
+        this.complaintImageList = complaintImageList;
+    }
+
+    public List<ComplaintUpdateStatus> getComplaintUpdateStatusList() {
+        return complaintUpdateStatusList;
+    }
+
+    public void setComplaintUpdateStatusList(List<ComplaintUpdateStatus> complaintUpdateStatusList) {
+        this.complaintUpdateStatusList = complaintUpdateStatusList;
+    }
+
+    
     
 }

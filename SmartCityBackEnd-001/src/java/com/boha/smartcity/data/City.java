@@ -12,6 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,6 +38,12 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "City.findByLatitude", query = "SELECT c FROM City c WHERE c.latitude = :latitude"),
     @NamedQuery(name = "City.findByLongitude", query = "SELECT c FROM City c WHERE c.longitude = :longitude")})
 public class City implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
+    private List<MunicipalityCity> municipalityCityList;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city", fetch = FetchType.LAZY)
+    private List<NewsArticle> newsArticleList;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,28 +55,28 @@ public class City implements Serializable {
     @Size(min = 1, max = 265)
     @Column(name = "cityName")
     private String cityName;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "latitude")
     private Double latitude;
     @Column(name = "longitude")
     private Double longitude;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private List<CityStaff> cityStaffList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private List<Alert> alertList;
+    
     @JoinColumn(name = "provinceID", referencedColumnName = "provinceID")
     @ManyToOne(optional = false)
     private Province province;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private List<Complaint> complaintList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "city")
-    private List<ProfileInfo> profileInfoList;
-
+    
     public City() {
     }
 
     public City(Integer cityID) {
         this.cityID = cityID;
+    }
+
+    public List<NewsArticle> getNewsArticleList() {
+        return newsArticleList;
+    }
+
+    public void setNewsArticleList(List<NewsArticle> newsArticleList) {
+        this.newsArticleList = newsArticleList;
     }
 
     public City(Integer cityID, String cityName) {
@@ -109,44 +116,12 @@ public class City implements Serializable {
         this.longitude = longitude;
     }
 
-    public List<CityStaff> getCityStaffList() {
-        return cityStaffList;
-    }
-
-    public void setCityStaffList(List<CityStaff> cityStaffList) {
-        this.cityStaffList = cityStaffList;
-    }
-
-    public List<Alert> getAlertList() {
-        return alertList;
-    }
-
-    public void setAlertList(List<Alert> alertList) {
-        this.alertList = alertList;
-    }
-
     public Province getProvince() {
         return province;
     }
 
     public void setProvince(Province province) {
         this.province = province;
-    }
-
-    public List<Complaint> getComplaintList() {
-        return complaintList;
-    }
-
-    public void setComplaintList(List<Complaint> complaintList) {
-        this.complaintList = complaintList;
-    }
-
-    public List<ProfileInfo> getProfileInfoList() {
-        return profileInfoList;
-    }
-
-    public void setProfileInfoList(List<ProfileInfo> profileInfoList) {
-        this.profileInfoList = profileInfoList;
     }
 
     @Override
@@ -173,5 +148,15 @@ public class City implements Serializable {
     public String toString() {
         return "com.boha.smartcity.data.City[ cityID=" + cityID + " ]";
     }
+
+    public List<MunicipalityCity> getMunicipalityCityList() {
+        return municipalityCityList;
+    }
+
+    public void setMunicipalityCityList(List<MunicipalityCity> municipalityCityList) {
+        this.municipalityCityList = municipalityCityList;
+    }
+
+  
     
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.boha.smartcity.dto;
 
@@ -20,19 +15,13 @@ public class CityDTO implements Serializable {
     private String cityName;
     private Double latitude;
     private Double longitude;
-    private List<CityStaffDTO> cityStaffList;
-    private List<AlertDTO> alertList;
     private Integer provinceID;
     private List<ComplaintDTO> complaintList;
-    private List<ProfileInfoDTO> profileInfoList;
 
     public CityDTO() {
     }
 
-    public CityDTO(Integer cityID) {
-        this.cityID = cityID;
-    }
-
+   
     public CityDTO(City a) {
         this.cityID = a.getCityID();
         this.cityName = a.getCityName();
@@ -82,22 +71,6 @@ public class CityDTO implements Serializable {
         this.longitude = longitude;
     }
 
-    public List<CityStaffDTO> getCityStaffList() {
-        return cityStaffList;
-    }
-
-    public void setCityStaffList(List<CityStaffDTO> cityStaffList) {
-        this.cityStaffList = cityStaffList;
-    }
-
-    public List<AlertDTO> getAlertList() {
-        return alertList;
-    }
-
-    public void setAlertList(List<AlertDTO> alertList) {
-        this.alertList = alertList;
-    }
-
     public List<ComplaintDTO> getComplaintList() {
         return complaintList;
     }
@@ -106,13 +79,6 @@ public class CityDTO implements Serializable {
         this.complaintList = complaintList;
     }
 
-    public List<ProfileInfoDTO> getProfileInfoList() {
-        return profileInfoList;
-    }
-
-    public void setProfileInfoList(List<ProfileInfoDTO> profileInfoList) {
-        this.profileInfoList = profileInfoList;
-    }
 
     @Override
     public int hashCode() {

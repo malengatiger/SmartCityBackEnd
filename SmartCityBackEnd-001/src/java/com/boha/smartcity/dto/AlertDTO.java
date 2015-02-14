@@ -3,47 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.boha.smartcity.dto;
 
 import com.boha.smartcity.data.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  *
  * @author aubreyM
  */
 public class AlertDTO implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    private Integer alertID;
+    private Integer alertID, municipalityID, municipalityStaffID, profileInfoID;
     private Date updated;
     private Integer id;
-    private String description, categoryName;
+    private String description;
     private String title;
-    private Double latitude;
+    private Double latitude, distance;
     private Double longitude;
     private String thumbnailURL;
     private String href;
     private Boolean activeFlag;
-    private Integer categoryID;
-    private Integer cityID;
+    private AlertTypeDTO alertType;
+    private MunicipalityStaffDTO staff;
+    private List<AlertImageDTO> alertImageList;
 
     public AlertDTO() {
     }
@@ -53,40 +39,83 @@ public class AlertDTO implements Serializable {
         this.updated = a.getUpdated();
         id = a.getId();
         description = a.getDescription();
-        categoryID = a.getCategory().getCategoryID();
-        categoryName = a.getCategory().getCategoryName();
         title = a.getTitle();
         latitude = a.getLatitude();
         longitude = a.getLongitude();
         thumbnailURL = a.getThumbnailURL();
         href = a.getHref();
         activeFlag = a.getActiveFlag();
-        cityID = a.getCity().getCityID();
+        municipalityID = a.getMunicipality().getMunicipalityID();
+        if (a.getMunicipalityStaff() != null) {
+            municipalityStaffID = a.getMunicipalityStaff().getMunicipalityStaffID();
+        }
+             
+        if (a.getProfileInfo() != null) {
+            profileInfoID = a.getProfileInfo().getProfileInfoID();
+        }
+        if (a.getAlertType() != null) {
+            alertType = new AlertTypeDTO(a.getAlertType());
+        }
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public Integer getMunicipalityID() {
+        return municipalityID;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setMunicipalityID(Integer municipalityID) {
+        this.municipalityID = municipalityID;
     }
 
-    public Integer getCategoryID() {
-        return categoryID;
+    public Integer getMunicipalityStaffID() {
+        return municipalityStaffID;
     }
 
-    public void setCategoryID(Integer categoryID) {
-        this.categoryID = categoryID;
+    public void setMunicipalityStaffID(Integer municipalityStaffID) {
+        this.municipalityStaffID = municipalityStaffID;
     }
 
-    public Integer getCityID() {
-        return cityID;
+    public Integer getProfileInfoID() {
+        return profileInfoID;
     }
 
-    public void setCityID(Integer cityID) {
-        this.cityID = cityID;
+    public void setProfileInfoID(Integer profileInfoID) {
+        this.profileInfoID = profileInfoID;
     }
+
+    public MunicipalityStaffDTO getStaff() {
+        return staff;
+    }
+
+    public void setStaff(MunicipalityStaffDTO staff) {
+        this.staff = staff;
+    }
+
+    public List<AlertImageDTO> getAlertImageList() {
+        return alertImageList;
+    }
+
+    public void setAlertImageList(List<AlertImageDTO> alertImageList) {
+        this.alertImageList = alertImageList;
+    }
+
+    
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public AlertTypeDTO getAlertType() {
+        return alertType;
+    }
+
+    public void setAlertType(AlertTypeDTO alertType) {
+        this.alertType = alertType;
+    }
+
+    
 
     public Integer getAlertID() {
         return alertID;
@@ -168,7 +197,6 @@ public class AlertDTO implements Serializable {
         this.activeFlag = activeFlag;
     }
 
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -193,5 +221,5 @@ public class AlertDTO implements Serializable {
     public String toString() {
         return "com.boha.smartcity.data.Alert[ alertID=" + alertID + " ]";
     }
-    
+
 }

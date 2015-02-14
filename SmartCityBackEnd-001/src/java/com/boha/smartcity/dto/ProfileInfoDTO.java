@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.boha.smartcity.dto;
 
@@ -19,9 +14,8 @@ public class ProfileInfoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer profileInfoID;
     private int customerID;
-    private String customerType;
+    private Integer customerTypeID, countryID;
     private String iDNumber;
-    private String iDCountry;
     private String title;
     private String firstName;
     private String lastName;
@@ -34,36 +28,26 @@ public class ProfileInfoDTO implements Serializable {
     private String contactPos;
     private Integer govDepID;
     private String govBranch;
-    private String email1;
-    private String email1Status;
-    private String email2;
+    private List<String> emailList;
     private Date dateActivated;
     private String empName;
     private String custStatus;
     private Integer capUserID;
     private Date capDate;
-    private String secondaryEmail;
     private String password;
     private List<ComplaintDTO> complaintList;
-    private Integer cityID;
+    private Integer municipalityID;
     private List<AccountDTO> accountList;
 
-    public ProfileInfoDTO() {
-    }
-
-    public ProfileInfoDTO(Integer profileInfoID) {
-        this.profileInfoID = profileInfoID;
-    }
 
     public ProfileInfoDTO(ProfileInfo a) {
-        this.profileInfoID = a.getProfileInfoID();
-        this.customerID = a.getCustomerID();
-        this.iDNumber = a.getIDNumber();
-        this.firstName = a.getFirstName();
-        this.lastName = a.getLastName();
-        customerType = a.getCustomerType();
-        iDNumber = a.getIDNumber();
-        iDCountry = a.getiDCountry();
+        profileInfoID = a.getProfileInfoID();
+        customerID = a.getCustomerID();
+        iDNumber = a.getiDNumber();
+        firstName = a.getFirstName();
+        lastName = a.getLastName();
+        customerTypeID = a.getCustomerType().getCustomerTypeID();
+        countryID = a.getCountry().getCountryID();
         title = a.getTitle();
         firstName = a.getFirstName();
         lastName = a.getLastName();
@@ -76,25 +60,47 @@ public class ProfileInfoDTO implements Serializable {
         contactPos = a.getContactPos();
         govDepID = a.getGovDepID();
         govBranch = a.getGovBranch();
-        email1 = a.getEmail1();
-        email1Status = a.getEmail1Status();
-        email2 = a.getEmail2();
         dateActivated = a.getDateActivated();
         empName = a.getEmpName();
         custStatus = a.getCustStatus();
         capDate = a.getCapDate();
         capUserID = a.getCapUserID();
-        secondaryEmail = a.getSecondaryEmail();
-        cityID = a.getCity().getCityID();
+        municipalityID = a.getMunicipality().getMunicipalityID();
     }
 
-    public Integer getCityID() {
-        return cityID;
+    public Integer getCustomerTypeID() {
+        return customerTypeID;
     }
 
-    public void setCityID(Integer cityID) {
-        this.cityID = cityID;
+    public void setCustomerTypeID(Integer customerTypeID) {
+        this.customerTypeID = customerTypeID;
     }
+
+    public Integer getCountryID() {
+        return countryID;
+    }
+
+    public void setCountryID(Integer countryID) {
+        this.countryID = countryID;
+    }
+
+    public List<String> getEmailList() {
+        return emailList;
+    }
+
+    public void setEmailList(List<String> emailList) {
+        this.emailList = emailList;
+    }
+
+    public Integer getMunicipalityID() {
+        return municipalityID;
+    }
+
+    public void setMunicipalityID(Integer municipalityID) {
+        this.municipalityID = municipalityID;
+    }
+
+    
 
     public Integer getProfileInfoID() {
         return profileInfoID;
@@ -112,13 +118,6 @@ public class ProfileInfoDTO implements Serializable {
         this.customerID = customerID;
     }
 
-    public String getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(String customerType) {
-        this.customerType = customerType;
-    }
 
     public String getIDNumber() {
         return iDNumber;
@@ -126,14 +125,6 @@ public class ProfileInfoDTO implements Serializable {
 
     public void setIDNumber(String iDNumber) {
         this.iDNumber = iDNumber;
-    }
-
-    public String getIDCountry() {
-        return iDCountry;
-    }
-
-    public void setIDCountry(String iDCountry) {
-        this.iDCountry = iDCountry;
     }
 
     public String getTitle() {
@@ -232,30 +223,6 @@ public class ProfileInfoDTO implements Serializable {
         this.govBranch = govBranch;
     }
 
-    public String getEmail1() {
-        return email1;
-    }
-
-    public void setEmail1(String email1) {
-        this.email1 = email1;
-    }
-
-    public String getEmail1Status() {
-        return email1Status;
-    }
-
-    public void setEmail1Status(String email1Status) {
-        this.email1Status = email1Status;
-    }
-
-    public String getEmail2() {
-        return email2;
-    }
-
-    public void setEmail2(String email2) {
-        this.email2 = email2;
-    }
-
     public Date getDateActivated() {
         return dateActivated;
     }
@@ -296,14 +263,6 @@ public class ProfileInfoDTO implements Serializable {
         this.capDate = capDate;
     }
 
-    public String getSecondaryEmail() {
-        return secondaryEmail;
-    }
-
-    public void setSecondaryEmail(String secondaryEmail) {
-        this.secondaryEmail = secondaryEmail;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -327,15 +286,6 @@ public class ProfileInfoDTO implements Serializable {
     public void setiDNumber(String iDNumber) {
         this.iDNumber = iDNumber;
     }
-
-    public String getiDCountry() {
-        return iDCountry;
-    }
-
-    public void setiDCountry(String iDCountry) {
-        this.iDCountry = iDCountry;
-    }
-
 
     public List<AccountDTO> getAccountList() {
         return accountList;

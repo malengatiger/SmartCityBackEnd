@@ -13,6 +13,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,35 +35,35 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "profileInfo")
 @NamedQueries({
-    @NamedQuery(name = "ProfileInfo.findAll", query = "SELECT p FROM ProfileInfo p"),
-    @NamedQuery(name = "ProfileInfo.findByProfileInfoID", query = "SELECT p FROM ProfileInfo p WHERE p.profileInfoID = :profileInfoID"),
-    @NamedQuery(name = "ProfileInfo.findByCustomerID", query = "SELECT p FROM ProfileInfo p WHERE p.customerID = :customerID"),
-    @NamedQuery(name = "ProfileInfo.findByCustomerType", query = "SELECT p FROM ProfileInfo p WHERE p.customerType = :customerType"),
-    @NamedQuery(name = "ProfileInfo.findByIDNumber", query = "SELECT p FROM ProfileInfo p WHERE p.iDNumber = :iDNumber"),
-    @NamedQuery(name = "ProfileInfo.findByIDCountry", query = "SELECT p FROM ProfileInfo p WHERE p.iDCountry = :iDCountry"),
-    @NamedQuery(name = "ProfileInfo.findByTitle", query = "SELECT p FROM ProfileInfo p WHERE p.title = :title"),
-    @NamedQuery(name = "ProfileInfo.findByFirstName", query = "SELECT p FROM ProfileInfo p WHERE p.firstName = :firstName"),
-    @NamedQuery(name = "ProfileInfo.findByLastName", query = "SELECT p FROM ProfileInfo p WHERE p.lastName = :lastName"),
-    @NamedQuery(name = "ProfileInfo.findByCellNumber", query = "SELECT p FROM ProfileInfo p WHERE p.cellNumber = :cellNumber"),
-    @NamedQuery(name = "ProfileInfo.findByHomeNumber", query = "SELECT p FROM ProfileInfo p WHERE p.homeNumber = :homeNumber"),
-    @NamedQuery(name = "ProfileInfo.findByWorkNumber", query = "SELECT p FROM ProfileInfo p WHERE p.workNumber = :workNumber"),
-    @NamedQuery(name = "ProfileInfo.findByManAgent", query = "SELECT p FROM ProfileInfo p WHERE p.manAgent = :manAgent"),
-    @NamedQuery(name = "ProfileInfo.findByOrgName", query = "SELECT p FROM ProfileInfo p WHERE p.orgName = :orgName"),
-    @NamedQuery(name = "ProfileInfo.findByContactPerson", query = "SELECT p FROM ProfileInfo p WHERE p.contactPerson = :contactPerson"),
-    @NamedQuery(name = "ProfileInfo.findByContactPos", query = "SELECT p FROM ProfileInfo p WHERE p.contactPos = :contactPos"),
-    @NamedQuery(name = "ProfileInfo.findByGovDepID", query = "SELECT p FROM ProfileInfo p WHERE p.govDepID = :govDepID"),
-    @NamedQuery(name = "ProfileInfo.findByGovBranch", query = "SELECT p FROM ProfileInfo p WHERE p.govBranch = :govBranch"),
-    @NamedQuery(name = "ProfileInfo.findByEmail1", query = "SELECT p FROM ProfileInfo p WHERE p.email1 = :email1"),
-    @NamedQuery(name = "ProfileInfo.findByEmail1Status", query = "SELECT p FROM ProfileInfo p WHERE p.email1Status = :email1Status"),
-    @NamedQuery(name = "ProfileInfo.findByEmail2", query = "SELECT p FROM ProfileInfo p WHERE p.email2 = :email2"),
-    @NamedQuery(name = "ProfileInfo.findByDateActivated", query = "SELECT p FROM ProfileInfo p WHERE p.dateActivated = :dateActivated"),
-    @NamedQuery(name = "ProfileInfo.findByEmpName", query = "SELECT p FROM ProfileInfo p WHERE p.empName = :empName"),
-    @NamedQuery(name = "ProfileInfo.findByCustStatus", query = "SELECT p FROM ProfileInfo p WHERE p.custStatus = :custStatus"),
-    @NamedQuery(name = "ProfileInfo.findByCapUserID", query = "SELECT p FROM ProfileInfo p WHERE p.capUserID = :capUserID"),
-    @NamedQuery(name = "ProfileInfo.findByCapDate", query = "SELECT p FROM ProfileInfo p WHERE p.capDate = :capDate"),
-    @NamedQuery(name = "ProfileInfo.findBySecondaryEmail", query = "SELECT p FROM ProfileInfo p WHERE p.secondaryEmail = :secondaryEmail"),
-    @NamedQuery(name = "ProfileInfo.findByPassword", query = "SELECT p FROM ProfileInfo p WHERE p.password = :password")})
+    @NamedQuery(name = "ProfileInfo.login", 
+            query = "SELECT p FROM ProfileInfo p where p.iDNumber = :idNumber and p.password = :password"),
+    
+})
 public class ProfileInfo implements Serializable {
+    @Column(name = "activeFlag")
+    private Boolean activeFlag;
+    @OneToMany(mappedBy = "profileInfo", fetch = FetchType.LAZY)
+    private List<ErrorStoreAndroid> errorStoreAndroidList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "profileInfo", fetch = FetchType.LAZY)
+    private List<CustomerEmail> customerEmailList;
+    @OneToMany(mappedBy = "profileInfo", fetch = FetchType.LAZY)
+    private List<GcmDevice> gcmDeviceList;
+    @JoinColumn(name = "municipalityID", referencedColumnName = "municipalityID")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Municipality municipality;
+    @JoinColumn(name = "countryID", referencedColumnName = "countryID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Country country;
+    @JoinColumn(name = "customerTypeID", referencedColumnName = "customerTypeID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CustomerType customerType;
+    @JoinColumn(name = "customerStatusID", referencedColumnName = "customerStatusID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private CustomerStatus customerStatus;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "profileInfo", fetch = FetchType.LAZY)
+    private List<ProfileImage> profileImageList;
+    @OneToMany(mappedBy = "profileInfo", fetch = FetchType.LAZY)
+    private List<Alert> alertList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,18 +73,13 @@ public class ProfileInfo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "customerID")
-    private int customerID;
-    @Size(max = 45)
-    @Column(name = "customerType")
-    private String customerType;
+    private int customerID;    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "IDNumber")
     private String iDNumber;
-    @Size(max = 255)
-    @Column(name = "IDCountry")
-    private String iDCountry;
+   
     @Size(max = 15)
     @Column(name = "title")
     private String title;
@@ -153,9 +149,7 @@ public class ProfileInfo implements Serializable {
     private String password;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "profileInfo")
     private List<Complaint> complaintList;
-    @JoinColumn(name = "cityID", referencedColumnName = "cityID")
-    @ManyToOne(optional = false)
-    private City city;
+  
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "profileInfo")
     private List<Account> accountList;
 
@@ -190,37 +184,7 @@ public class ProfileInfo implements Serializable {
         this.customerID = customerID;
     }
 
-    public String getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(String customerType) {
-        this.customerType = customerType;
-    }
-
-    public String getIDNumber() {
-        return iDNumber;
-    }
-
-    public void setIDNumber(String iDNumber) {
-        this.iDNumber = iDNumber;
-    }
-
-    public String getIDCountry() {
-        return iDCountry;
-    }
-
-    public void setIDCountry(String iDCountry) {
-        this.iDCountry = iDCountry;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  
 
     public String getFirstName() {
         return firstName;
@@ -406,22 +370,6 @@ public class ProfileInfo implements Serializable {
         this.iDNumber = iDNumber;
     }
 
-    public String getiDCountry() {
-        return iDCountry;
-    }
-
-    public void setiDCountry(String iDCountry) {
-        this.iDCountry = iDCountry;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
     public List<Account> getAccountList() {
         return accountList;
     }
@@ -453,6 +401,94 @@ public class ProfileInfo implements Serializable {
     @Override
     public String toString() {
         return "com.boha.smartcity.data.ProfileInfo[ profileInfoID=" + profileInfoID + " ]";
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
+    }
+
+    public CustomerStatus getCustomerStatus() {
+        return customerStatus;
+    }
+
+    public void setCustomerStatus(CustomerStatus customerStatus) {
+        this.customerStatus = customerStatus;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<ProfileImage> getProfileImageList() {
+        return profileImageList;
+    }
+
+    public void setProfileImageList(List<ProfileImage> profileImageList) {
+        this.profileImageList = profileImageList;
+    }
+
+    public List<Alert> getAlertList() {
+        return alertList;
+    }
+
+    public void setAlertList(List<Alert> alertList) {
+        this.alertList = alertList;
+    }
+
+    public List<ErrorStoreAndroid> getErrorStoreAndroidList() {
+        return errorStoreAndroidList;
+    }
+
+    public void setErrorStoreAndroidList(List<ErrorStoreAndroid> errorStoreAndroidList) {
+        this.errorStoreAndroidList = errorStoreAndroidList;
+    }
+
+    public List<CustomerEmail> getCustomerEmailList() {
+        return customerEmailList;
+    }
+
+    public void setCustomerEmailList(List<CustomerEmail> customerEmailList) {
+        this.customerEmailList = customerEmailList;
+    }
+
+    public List<GcmDevice> getGcmDeviceList() {
+        return gcmDeviceList;
+    }
+
+    public void setGcmDeviceList(List<GcmDevice> gcmDeviceList) {
+        this.gcmDeviceList = gcmDeviceList;
+    }
+
+    public Boolean getActiveFlag() {
+        return activeFlag;
+    }
+
+    public void setActiveFlag(Boolean activeFlag) {
+        this.activeFlag = activeFlag;
     }
     
 }
